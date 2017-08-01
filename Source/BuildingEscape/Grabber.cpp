@@ -23,6 +23,18 @@ void UGrabber::BeginPlay()
 
 	// ...
 	UE_LOG(LogTemp, Warning, TEXT("Grabber reporting for duty!"));
+
+	/// Attach physics handle
+	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+
+	if (PhysicsHandle)
+	{
+
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Unable to find physics handle on %s"), *GetOwner()->GetName());
+	}
 }
 
 
@@ -35,11 +47,6 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	FRotator viewRotation;
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(viewPosition, viewRotation);
 
-	/*
-	UE_LOG(LogTemp, Warning, TEXT("Location: %s, Rotation: %s"),
-		*viewPosition.ToString(),
-		*viewRotation.ToString());
-	*/
 	FVector traceEnd = viewPosition + viewRotation.Vector() * Reach; // FVector(0.0f, 0.0f, 20.0f);
 	DrawDebugLine(GetWorld(), viewPosition, traceEnd, FColor(255, 0, 0), false, 0.0f, 0.0f, 10.0f);
 
