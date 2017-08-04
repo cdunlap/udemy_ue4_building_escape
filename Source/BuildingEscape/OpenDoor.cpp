@@ -5,6 +5,7 @@
 #include "Engine/World.h"
 #include "GameFramework/Pawn.h"
 #include "GameFramework/PlayerController.h"
+#include "Components/PrimitiveComponent.h"
 
 // Sets default values for this component's properties
 UOpenDoor::UOpenDoor()
@@ -22,7 +23,6 @@ void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
 	Owner = GetOwner();
 }
 
@@ -32,8 +32,10 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+
+
 	// ...
-	if (PressurePlate && PressurePlate->IsOverlappingActor(ActorThatOpens))
+	if (GetTotalMassOfActorsOnPlate() > 50.0f)
 	{
 		OpenDoor();
 	}
@@ -53,4 +55,21 @@ void UOpenDoor::OpenDoor()
 void UOpenDoor::CloseDoor()
 {
 	Owner->SetActorRotation(FRotator(0.f, 0, 0.f));
+}
+
+float UOpenDoor::GetTotalMassOfActorsOnPlate()
+{
+	float totalMass = 0.0f;
+	if (PressurePlate)
+	{
+		TArray<AActor *> overlappingActors;
+		PressurePlate->GetOverlappingActors(overlappingActors);
+
+		for (const auto *actor : overlappingActors)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Weighing actor %s"), *actor->GetName());
+			totalMass += actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
+		}
+	}
+	return totalMass;
 }
