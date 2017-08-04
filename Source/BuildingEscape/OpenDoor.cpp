@@ -24,6 +24,11 @@ void UOpenDoor::BeginPlay()
 	Super::BeginPlay();
 	
 	Owner = GetOwner();
+
+	if (PressurePlate == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s does not have PressurePlate specified"), *Owner->GetName());
+	}
 }
 
 

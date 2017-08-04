@@ -53,7 +53,7 @@ void UGrabber::SetupInputComponent()
 {
 	/// Get the input component
 	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
-	if (InputComponent)
+	if (InputComponent != nullptr)
 	{
 		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
 		InputComponent->BindAction("Grab", IE_Released, this, &UGrabber::GrabReleased);
@@ -103,7 +103,7 @@ void UGrabber::Grab()
 	UPrimitiveComponent * hitComponent = hitResult.GetComponent();
 	AActor * hitActor = hitResult.GetActor();
 
-	if (hitActor)
+	if (hitActor != nullptr)
 	{		
 		PhysicsHandle->GrabComponent(hitComponent, NAME_None, hitActor->GetActorLocation(), true);
 	}
@@ -112,7 +112,7 @@ void UGrabber::Grab()
 void UGrabber::GrabReleased()
 {
 	/// Release physics handle
-	if (PhysicsHandle->GrabbedComponent)
+	if (PhysicsHandle != nullptr && PhysicsHandle->GrabbedComponent)
 	{
 		PhysicsHandle->ReleaseComponent();
 	}
