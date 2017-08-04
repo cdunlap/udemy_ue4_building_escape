@@ -45,5 +45,12 @@ private:
 	// Setup assumed input component
 	void SetupInputComponent();
 
+	// Gets the first body that the grabber touched
 	FHitResult GetFirstPhysicsBodyInReach() const;
+
+	// Gets the reach line starting position
+	FVector GetReachLineStart() const;
+
+	// Gets the reach line ending position
+	FVector GetReachLineEnd() const;
 };
